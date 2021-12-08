@@ -1,4 +1,5 @@
 # Hackerrank Automation 
+Automated the process of logging in on hackerrank and adding moderator in the contests using Puppeteer
 ## The script performs the following tasks:
 ## 🚨  Opens the browser and get to the provided url
 ## 🚨  Login with your given email and password.
