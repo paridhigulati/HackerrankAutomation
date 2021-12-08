@@ -2,6 +2,7 @@ const puppeteer = require("puppeteer");
 const loginLink = " https://www.hackerrank.com/auth/login";
 const email = 'uihfltu@gumaygo.com'
 const password = 'userone'
+const codeObj = require('./codes')
 let browserOpen = puppeteer.launch({
   headless: false, //makes it visible
   args: ["--start-maximized"], //shows in fullscreen
@@ -13,8 +14,8 @@ browserOpen.then(function (browserObj) {
   //returns a promise
   let browserOpenPromise = browserObj.newPage();
   return browserOpenPromise;
-}).then(function(newTab){
-  page = newTab
+}).then(function(newTab){ //promise chaining
+  page = newTab 
   let hackerrankOpenpromise =newTab.goto(loginLink)
   return hackerrankOpenpromise;// reaches to login page 
 }).then(function(){
@@ -42,14 +43,9 @@ return waitfor3Seconds
 }).then(function(questionArray)
 {
     console.log('number of questions', questionArray.length);
-})
-
-
-
-
-
-
-
+     let questionWillBeSolved = questionSolver(page,questionArray[0], codeObj.answers[0]);
+return questionWillBeSolved
+    })
 
 function waitAndClick(selector, cPage) //waits for that element which is available after page gets loaded bbcoz only after that we are able to access those elements 
 { 
@@ -65,3 +61,55 @@ function waitAndClick(selector, cPage) //waits for that element which is availab
         })
     })
 }
+function questionSolver( question)
+{
+    return new Promise(function(resolve, reject){
+        let questionWillBeClicked = question.click()
+        questionWillBeClicked.then(function(){
+          let EditorInFocusPromise = waitAndClick('.monaco-editor.no-user-select.vs', page)
+          return EditorInFocusPromise
+        }).then(function(){
+            return waitAndClick('.checkbox-input', page)
+        }).then(function(){
+            return page.waitForSelector('textarea.custominput',page)
+        }).then(function(){
+            return page.type('textarea.custominput', answer, {delay:10})
+
+        }).then(function(){
+            let ctrlIsPressed = page.keyboard.down('Control')
+            return ctrlIsPressed
+        }).then(function(){
+            let AisPressed = page.keyboard.press('A', {delay:100})
+            return AisPressed
+        }).then(function()
+        {
+            let XisPressed = page.keyboard.press('X', {delay : 100})
+            return XisPressed
+        }).then(function()
+        {
+            let ctrlisUnPressed = page.keyboard.up(Control)
+            return ctrlisUnPressed
+        }).then(function()
+        {
+            let mainEditorinFocus = waitAndClick('.monaco-editor.no-user-select.vs', page)
+            return mainEditorinFocus
+        })   }).then(function(){
+            let ctrlIsPressed = page.keyboard.down('Control')
+            return ctrlIsPressed
+        }).then(function(){
+            let AisPressed = page.keyboard.press('A', {delay:100})
+            return AisPressed
+        }).then(function()
+        {
+            let VisPressed = page.keyboard.press('V', {delay : 100})
+            return VisPressed
+        }).then(function()
+        {
+            let ctrlisUnPressed = page.keyboard.up(Control)
+            return ctrlisUnPressed
+        })
+    
+}
+
+//challenge faced -> editors have inbuilt auto close but if write code through automation it will give for(())
+//solution -> write code in test against custom input box copy it and paste in editor
