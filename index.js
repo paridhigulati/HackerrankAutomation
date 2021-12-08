@@ -1,3 +1,4 @@
+const { resolve } = require("path/posix");
 const puppeteer = require("puppeteer");
 const loginLink = " https://www.hackerrank.com/auth/login";
 const email = 'uihfltu@gumaygo.com'
@@ -107,6 +108,13 @@ function questionSolver( question)
         {
             let ctrlisUnPressed = page.keyboard.up(Control)
             return ctrlisUnPressed
+        }).then(function(){
+            return page.click('.hr-monaco_run-code', {delay : 50})
+        }).then(function(){
+            resolve()
+        }).catch(function(err)
+        {
+            reject()
         })
     
 }
